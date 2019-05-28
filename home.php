@@ -5,7 +5,7 @@ $pdo = NEW PDO('mysql:host=172.17.0.3;dbname=blog;','userblog','blogpwd');
 $pagination = $pdo->query('SELECT count(id) FROM post')->fetch()[0]/10;
 
 if(null !== $_GET['page'] && intval($_GET['page']) > 0 && $_GET['page'] <=$pagination){
-    $start = 10 * $_GET['page'];
+    $start = 10 * $_GET['page'] -10;
 }
 else{
     if(null !== $_GET['page']  && !intval($_GET['page']) || $_GET['page'] > $pagination){
@@ -13,7 +13,7 @@ else{
     }
     $start = 0;
 }
-$query= "SELECT * FROM post ORDER BY id DESC";
+$query= "SELECT * FROM post ORDER BY id LIMIT 10 OFFSET {$start}";
 $query = $pdo->prepare($query);
 $query->execute();
 ?>
